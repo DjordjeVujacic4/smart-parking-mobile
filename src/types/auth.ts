@@ -4,7 +4,12 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  full_name: string;
   email: string;
+  full_name: string;
   password: string;
+}
+
+export interface TokenResponse {
+  access_token: string;
+  token_type: string;
 }

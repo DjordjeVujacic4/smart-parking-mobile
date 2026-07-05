@@ -1,16 +1,16 @@
-import { API_BASE_URL } from "@/constants/api";
 import axios from "axios";
-import * as SecureStore from "expo-secure-store";
+import { API_BASE_URL } from "../constants/api";
+import { getToken } from "../services/auth.service";
 
-export const apiClient = axios.create({
+export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-apiClient.interceptors.request.use(async (config) => {
-  const token = await SecureStore.getItemAsync("access_token");
+api.interceptors.request.use(async (config) => {
+  const token = await getToken();
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
