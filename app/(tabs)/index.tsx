@@ -1,17 +1,82 @@
 import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import { AppCard } from "../../src/components/card/AppCard";
 import { AppScreen } from "../../src/components/screen/AppScreen";
 import { useAuth } from "../../src/context/AuthContext";
 
+import { useEffect } from "react";
+import { ActiveReservationCard } from "../../src/components/reservation/ActiveReservationCard";
+import { fetchReservations, removeReservation } from "../../src/services/reservation.service";
+import { Reservation } from "../../src/types/reservation";
+
+
 export default function HomeScreen() {
   const { logout } = useAuth();
-
+  const [activeReservation, setActiveReservation] = useState<Reservation | null>(null);
+  const [remainingTime, setRemainingTime] = useState("--:--");
   async function handleLogout() {
     await logout();
     router.replace("/(auth)/login");
   }
+  async function loadActiveReservation() {
+    const data = await fetchReservations();
+    const active = data.items.find((item) => item.status === "active") ?? null;
+    setActiveReservation(active);
+  }
+  async function handleCancelReservation() {
+    if (!activeReservation) return;
+
+    try {
+      await removeReservation(activeReservation.id);
+
+      setActiveReservation(null);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  function calculateRemainingTime(expiresAt: string) {
+    const now = new Date().getTime();
+    const expires = new Date(expiresAt).getTime();
+
+    const difference = expires - now;
+
+    if (difference <= 0) {
+      return "00:00";
+    }
+
+    const minutes = Math.floor(difference / 60000);
+    const seconds = Math.floor((difference % 60000) / 1000);
+
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  }
+  useFocusEffect(
+    useCallback(() => {
+      loadActiveReservation();
+    }, [])
+  );
+  useEffect(() => {
+    if (!activeReservation) {
+      setRemainingTime("--:--");
+      return;
+    }
+
+    setRemainingTime(calculateRemainingTime(activeReservation.expires_at));
+
+    const interval = setInterval(() => {
+      const time = calculateRemainingTime(activeReservation.expires_at);
+
+      setRemainingTime(time);
+
+      if (time === "00:00") {
+        loadActiveReservation();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [activeReservation]);
 
   return (
     <AppScreen>
@@ -34,11 +99,19 @@ export default function HomeScreen() {
         onPress={() => router.push("/(tabs)/vehicles")}
       />
 
-      <AppCard
-        icon="⏱️"
-        title="Active Reservation"
-        subtitle="No active reservation yet"
-      />
+      {activeReservation ? (
+        <ActiveReservationCard
+          reservation={activeReservation}
+          remainingTime={remainingTime}
+          onCancel={handleCancelReservation}
+        />
+      ) : (
+        <AppCard
+          icon="⏱️"
+          title="Active Reservation"
+          subtitle="No active reservation yet"
+        />
+      )}
 
       <Pressable style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Logout</Text>
