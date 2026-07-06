@@ -1,50 +1,201 @@
-# Welcome to your Expo app 👋
+# Smart Parking - Mobile Application (Frontend)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Smart Parking is a mobile application developed with React Native and Expo that enables users to search for parking locations, reserve parking spots, perform check-in/check-out operations, and manage their vehicles and reservations.
 
-## Get started
+## Features
 
-1. Install dependencies
+- User authentication (Login / Register)
+- View available parking locations
+- Interactive parking spot selection
+- Create parking reservations
+- Cancel active reservations
+- Parking check-in
+- Parking check-out
+- Reservation history
+- Vehicle management
+- Responsive mobile interface
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+## Technologies
 
-   ```bash
-   npx expo start
-   ```
+- React Native
+- Expo
+- TypeScript
+- Expo Router
+- React Navigation
+- Axios
+- Context API
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+```
+app/
+    (auth)/
+    (tabs)/
+    reservations/
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+src/
+    api/
+    components/
+    context/
+    services/
+    types/
+    utils/
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## Installation
 
-To learn more about developing your project with Expo, look at the following resources:
+Clone the repository:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+git clone <repository-url>
+```
 
-## Join the community
+Navigate to the project:
 
-Join our community of developers creating universal apps.
+```bash
+cd frontend
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Install dependencies:
+
+```bash
+npm install
+```
+
+or
+
+```bash
+yarn
+```
+
+---
+
+## Running the Application
+
+Start Expo:
+
+```bash
+npx expo start
+```
+
+Run on Android:
+
+```bash
+a
+```
+
+Run on iOS:
+
+```bash
+i
+```
+
+Run in Web browser:
+
+```bash
+w
+```
+
+---
+
+## Backend Connection
+
+The application communicates with the Smart Parking REST API.
+
+Example configuration:
+
+```ts
+const API_URL = "http://localhost:8000";
+```
+
+---
+
+## Main Screens
+
+### Authentication
+
+- Login
+- Registration
+
+### Home
+
+- Active reservation
+- Check In
+- Check Out
+- Reservation countdown
+
+### Parking
+
+- List of parking locations
+- Parking spot availability
+
+### Vehicles
+
+- View vehicles
+- Add vehicle
+- Delete vehicle
+
+### Reservations
+
+- Reservation history
+- Reservation details
+
+---
+
+## Parking Workflow
+
+1. User selects a parking location.
+2. User chooses an available parking spot.
+3. Reservation is created.
+4. User performs Check In upon arrival.
+5. Parking session becomes active.
+6. User performs Check Out when leaving.
+7. Reservation is completed.
+
+---
+
+## API Communication
+
+The frontend communicates with the backend using Axios.
+
+Main modules:
+
+- Authentication
+- Vehicles
+- Parking
+- Reservations
+- Parking Sessions
+
+---
+
+## Project Architecture
+
+The project follows a layered architecture:
+
+```
+UI Components
+      │
+      ▼
+Screens
+      │
+      ▼
+Services
+      │
+      ▼
+API Layer
+      │
+      ▼
+REST Backend
+```
+
+---
+
+## Author
+
+Developed as part of the Smart Parking project using React Native and Expo.
